@@ -33,10 +33,15 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request) : RedirectResponse
     {
-        Product::create($request->validated());
-
-        return redirect()->route('products.index')
+        try {
+            Product::create($request->validated());
+            return redirect()->route('products.index')
                 ->withSuccess('New product is added successfully.');
+        } catch (\Exception $exception){
+            return redirect()->route('products.index')
+                ->withErrors('New product is failed.');        }
+
+
     }
 
     /**
@@ -71,6 +76,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product) : RedirectResponse
     {
+        
         $product->delete();
 
         return redirect()->route('products.index')
