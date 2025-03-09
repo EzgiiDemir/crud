@@ -12,7 +12,16 @@
                 <div class="card-body">
                     <!-- Profile Picture Section -->
                     <div class="text-center">
-                        <img src="{{ Auth::user()->profile_picture_url ?? asset('images/default-avatar.png') }}" alt="Profile Picture" class="rounded-circle text-center" width="150">
+                    <form action="{{ route('profile.changePicture') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="mb-3">
+        <label for="profile_picture" class="form-label">Change Profile Picture</label>
+        <input type="file" class="form-control" name="profile_picture" id="profile_picture" required>
+    </div>
+    <button type="submit" class="btn btn-primary btn-sm">Upload New Picture</button>
+</form>
+
+
                         <div class="mt-3">
                             <!-- Change Profile Picture Button (Modal veya yeni sayfa için yönlendirme) -->
                             <a href="{{ route('profile.picture.change') }}" class="btn btn-dark btn-sm">Change Profile Picture</a>

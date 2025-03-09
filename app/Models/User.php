@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_picture_url',
     ];
 
     /**
@@ -57,5 +58,6 @@ public function products()
     {
         return $this->hasMany(Product::class);
     }
+
 
 }

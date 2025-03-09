@@ -31,7 +31,7 @@
                             <i class="bi bi-person-circle"></i> Profile
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item text-orange-600" href="#">My Account</a></li>
+                            <li><a class="dropdown-item text-orange-600"href="{{ route('account') }}">My Account</a></li>
                             <li><a class="dropdown-item text-orange-600" href="#">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
