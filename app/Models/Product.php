@@ -14,6 +14,15 @@ class Product extends Model
         'name',
         'quantity',
         'price',
-        'description'
+        'description',
+        'user_id', // kullanıcı ile ilişki için user_id eklenmeli
     ];
+
+    /**
+     * Product modelindeki kullanıcıya ait ilişki
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

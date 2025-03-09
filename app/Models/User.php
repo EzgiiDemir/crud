@@ -44,4 +44,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // User model (app/Models/User.php)
+public function setProfilePicture($image)
+{
+    // Dosyayı public storage'a kaydedin
+    $imageName = time() . '.' . $image->extension();
+    $image->move(public_path('images'), $imageName);
+    $this->profile_picture = $imageName;
+    $this->save();
+}
+public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
 }

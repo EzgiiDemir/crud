@@ -4,17 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Simple Laravel 11 CRUD Application Tutorial - AllPHPTricks.com</title>
+    <title>Ezgi's Product</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="text-orange-600">
 
-    <div class="container">
-        <h3 class=" my-5 text-center">Ezgi's Product</h3>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+        <div class="text-xl font-bold"><img src="{{ asset('images/kitten.png') }}" href="{{ route('home') }}" alt="Kitten" style="max-width: 50px; "></div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class=" navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-orange-600" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-orange-600" href="{{ route('products.index') }}">Products</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-orange-600" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item text-orange-600" href="#">My Account</a></li>
+                            <li><a class="dropdown-item text-orange-600" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-orange-600" style="background: none; border: none; color: inherit;">
+                                Logout
+                            </button>
+                        </form>
+                         </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="text-orange-600">
             @yield('content')
+        </div>
     </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="bg-light text-orange-600 p-4 mt-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-sm">&copy; 2025 Ezgi Company</div>
+            <div class="space-x-6">
+                <a href="#" class="hover:text-gray-200 transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-200 transition">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
