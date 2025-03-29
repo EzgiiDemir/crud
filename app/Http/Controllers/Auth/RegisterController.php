@@ -41,8 +41,7 @@ class RegisterController extends Controller
         // Optionally, log the user in after registration (using Laravel's Auth)
     auth()->login($user);
 
-    // Store the user's name in session
-    session(['name' => $user->name]);
+
         // Redirect to a desired page after successful registration
         return redirect()->route('register');  // Adjust this route as needed
     }

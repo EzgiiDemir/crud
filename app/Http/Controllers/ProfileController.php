@@ -41,4 +41,31 @@ class ProfileController extends Controller
     {
         return view('products.profiledit');
     }
+    public function update(Request $request)
+    {
+        // Doğrulama
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        // Kullanıcıyı al
+        $user = Auth::user();
+
+        // Profil bilgilerini güncelle
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        // Şifre güncellenmişse, yeni şifreyi kaydet
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
+
+        // Veritabanına kaydet
+        $user->save();
+
+        // Başarılı bir şekilde güncellendikten sonra yönlendirme
+        return redirect()->route('account')->with('success', 'Profile updated successfully.');
+    }
 }

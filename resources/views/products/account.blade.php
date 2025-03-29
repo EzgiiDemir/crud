@@ -6,6 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
+
                     <h3>My Account</h3>
                 </div>
 
@@ -15,6 +16,10 @@
                     <form action="{{ route('profile.changePicture') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
+    <img src="{{ Auth::user()->profile_picture ?? 'https://www.papgift.com/wp-content/uploads/2022/11/Resim-Sanati-Turleri-ve-Ozellikleri-Nelerdir.jpg' }}"
+     class="d-block mx-auto rounded-circle"
+     style="max-width: 100px;"
+     alt="Profile Picture">
         <label for="profile_picture" class="form-label">Change Profile Picture</label>
         <input type="file" class="form-control" name="profile_picture" id="profile_picture" required>
     </div>
@@ -53,7 +58,6 @@
 
                     <hr>
 
-                    <!-- Product History Section -->
                     <div class="mt-4">
                         <h5>Product History</h5>
                         @if($products->isEmpty())
@@ -69,6 +73,7 @@
                             </ul>
                         @endif
                     </div>
+
 
                     <!-- Pagination for products -->
                     <div class="mt-3">
