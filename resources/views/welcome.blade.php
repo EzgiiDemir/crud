@@ -8,14 +8,9 @@
 </head>
 
 <body class="bg-gray-200 font-sans antialiased">
-
-    <!-- Navbar -->
     <nav class="bg-orange-800 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <!-- Sol taraf: Marka -->
             <div class="text-xl font-bold"><img src="{{ asset('images/kitten.png') }}" alt="Kitten" style="max-width: 50px;"></div>
-
-            <!-- Sağ taraf: Linkler -->
             <div class="space-x-6">
                 <a href="#" class="hover:text-gray-200 transition">Contact</a>
                 <a href="#" class="hover:text-gray-200 transition">About</a>
@@ -23,10 +18,8 @@
         </div>
     </nav>
 
-    <!-- Sayfa İçeriği -->
     <div class="flex flex-col items-center justify-center min-h-screen mt-8 space-y-8">
 
-        <!-- Welcome Bölümü -->
         <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full text-center mx-5">
             <h1 class="text-3xl font-bold text-orange-600 mb-4">Welcome to Ezgi's Products</h1>
             <h3 class="text-xl text-gray-700 mb-6">Discover Our Products</h3>
@@ -36,7 +29,6 @@
             </a>
         </div>
 
-        <!-- Register Form Bölümü -->
         <div class="mx-5 bg-gradient-to-b from-white to-gray-100 p-6 rounded-xl shadow-lg max-w-md sm:max-w-sm md:max-w-lg w-full">
             <div class="text-2xl font-extrabold text-orange-600 text-center mb-6">Register</div>
             <form class="space-y-4" method="POST" action="{{ route('register') }}">
@@ -52,7 +44,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-orange-800 text-white p-4 mt-8">
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-sm">&copy; 2025 Ezgi Company</div>

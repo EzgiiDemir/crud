@@ -4,13 +4,11 @@
 
 <div class="row justify-content-center mt-3">
     <div class="col-md-8">
-
         @session('success')
             <div class="alert alert-success" role="alert">
                 {{ $value }}
             </div>
         @endsession
-
         <div class="card">
             <div class="card-header">
                 <div class="float-start">
@@ -74,11 +72,9 @@
                             @enderror
                         </div>
                     </div>
-
                     <div class="mb-3 row">
                         <input type="submit" class="col-md-3 offset-md-5 btn btn-dark" value="Update">
                     </div>
-
                 </form>
             </div>
         </div>

@@ -8,14 +8,11 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const theme = "{{ $settings['theme'] }}";
-        // Sayfa yüklendiğinde, kullanıcının seçtiği temayı uygula
         if (theme === 'dark') {
             document.body.classList.add('dark-theme');
         } else {
             document.body.classList.add('light-theme');
         }
-
-        // Tema seçeneği değiştiğinde sayfayı güncelle
         document.getElementById("theme").addEventListener("change", function () {
             if (this.value === 'light') {
                 document.body.classList.remove("dark-theme");
@@ -72,7 +69,7 @@
 </div>
 
 <style>
-    /* Koyu tema için stiller */
+
     .dark-theme {
         background-color: #121212;
         color: #ffffff;
@@ -89,7 +86,7 @@
         border: 1px solid #555;
     }
 
-    /* Açık tema için stiller */
+
     .light-theme {
         background-color: #ffffff;
         color: #000000;

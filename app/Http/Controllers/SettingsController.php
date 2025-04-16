@@ -9,25 +9,36 @@ class SettingsController extends Controller
 {
     public function show()
     {
-        $user = Auth::user(); // Kullanıcıyı al
-        $settings = json_decode($user->settings, true) ?? ['notifications' => 'enabled', 'theme' => 'light']; // Ayarları al, yoksa varsayılan ayarları kullan
-        return view('products.settings', compact('settings')); // Ayarları view'a gönder
+        $user = Auth::user();
+        $settings = json_decode($user->settings, true) ?? [
+            'notifications' => 'enabled',
+            'theme' => 'light',
+        ];
+
+        return view('products.settings', compact('settings'));
     }
 
     public function update(Request $request)
     {
-        $user = Auth::user(); // Kullanıcıyı al
-
-        // Gelen ayarları güncelle
-        $user->settings = json_encode([
-            'notifications' => $request->notifications, // E-posta bildirim durumu
-            'theme' => $request->theme // Tema durumu
+        $request->validate([
+            'notifications' => 'required|in:enabled,disabled',
+            'theme' => 'required|in:light,dark',
+        ], [
+            'notifications.required' => 'Notification setting is required.',
+            'notifications.in' => 'Notification setting must be either "enabled" or "disabled".',
+            'theme.required' => 'Theme selection is required.',
+            'theme.in' => 'Theme must be either "light" or "dark".',
         ]);
 
-        // Kullanıcıyı kaydet
+        $user = Auth::user();
+
+        $user->settings = json_encode([
+            'notifications' => $request->notifications,
+            'theme' => $request->theme,
+        ]);
+
         $user->save();
 
-        // Başarı mesajı ile ayar sayfasına yönlendir
         return redirect()->route('settings')->with('success', 'Settings updated successfully.');
     }
 }

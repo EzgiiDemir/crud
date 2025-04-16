@@ -10,10 +10,9 @@ class AccountController extends Controller
 {
     public function showAccount()
     {
-
-        $products = Product::where('user_id', Auth::id())->latest()->paginate(5);
+        $products = Product::where('user_id', Auth::id())->latest()->get();
 
         return view('products.account', compact('products'));
-
     }
+
 }

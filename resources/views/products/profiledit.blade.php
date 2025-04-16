@@ -14,8 +14,6 @@
                             {{ session('success') }}
                         </div>
                     @endif
-
-                    <!-- Profile Edit Form -->
                     <form action="{{ route('profile.update') }}" method="POST">
                         @csrf
                         <div class="mb-3">

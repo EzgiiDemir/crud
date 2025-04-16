@@ -4,7 +4,6 @@
 
 <div class="row justify-content-center mt-3">
     <div class="col-12 col-md-8">
-
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between flex-column flex-md-row">
@@ -50,7 +49,6 @@
                         {{ $product->description }}
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

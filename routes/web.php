@@ -6,9 +6,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SettingsController; // SettingsController Eklenmeli
+use App\Http\Controllers\SettingsController;
 
-// AUTHENTICATED ROUTES (Kullanıcı Giriş Yapmışsa)
+
 Route::middleware('auth')->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
 });
 
-// GUEST ROUTES (Giriş Yapmadan Erişilebilir)
+
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -33,6 +33,7 @@ Route::get('/', function () {
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login.form');
 Route::post('login', [LoginController::class, 'login'])->name('login');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
 Route::post('register', [RegisterController::class, 'register'])->name('register');

@@ -7,14 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-200 font-sans antialiased">
-
-    <!-- Navbar -->
     <nav class="bg-orange-800 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <!-- Sol taraf: Marka -->
             <div class="text-xl font-bold"><img src="{{ asset('images/kitten.png') }}" alt="Kitten" style="max-width: 50px;"></div>
-
-            <!-- Sağ taraf: Linkler -->
             <div class="space-x-6">
                 <a href="#" class="hover:text-gray-200 transition">Contact</a>
                 <a href="#" class="hover:text-gray-200 transition">About</a>
@@ -22,29 +17,26 @@
         </div>
     </nav>
     <div class="flex flex-col items-center justify-center min-h-screen space-y-8">
-<div class="max-w-sm w-full bg-gradient-to-t from-white via-white to-gray-100 rounded-3xl p-8 border-4 border-white shadow-lg">
-    <div class="text-center font-extrabold text-3xl text-orange-600 mb-4 ">Sign in</div>
-
+        <div class="max-w-sm w-full bg-gradient-to-t from-white via-white to-gray-100 rounded-3xl p-8 border-4 border-white shadow-lg">
+        <div class="text-center font-extrabold text-3xl text-orange-600 mb-4 ">Sign in</div>
     <form class="space-y-4" method="POST" action="{{ route('login') }}">
         @csrf
         <input required class="w-full bg-white border border-transparent rounded-xl p-4 shadow-md focus:border-orange-400 focus:outline-none" type="email" name="email" id="email" placeholder="E-mail" value="{{ old('email') }}">
         @if($errors->has('email'))
     <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
-@endif
+    @endif
 
         <input required class="w-full bg-white border border-transparent rounded-xl p-4 shadow-md focus:border-orange-400 focus:outline-none" type="password" name="password" id="password" placeholder="Password"  value="{{ old('password') }}">
         @if($errors->has('password'))
     <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
-@endif
+    @endif
 
         <input class="w-2/3 mx-auto block bg-orange-500  to-orange-500 text-white font-bold py-2 rounded-xl shadow-md transform transition-transform duration-200 hover:scale-105" type="submit" value="Login"  value="{{ old('login') }}">
         @if($errors->has('login'))
     <span class="text-red-500 text-sm block text-center">{{ $errors->first('login') }}</span>
-@endif
-
+    @endif
         <span class="block text-center text-sm mt-2"><a href="#" class="text-orange-600">Forgot Password?</a></span>
     </form>
-
     <div class="mt-6 text-center">
         <span class="block text-sm text-gray-600">Or Sign in with</span>
 
@@ -60,7 +52,6 @@
             </button>
         </div>
     </div>
-
     <span class="block text-center text-xs mt-4"><a href="#" class="text-center block mt-4 text-sm">Learn user licence agreement</a></span>
 </div>
 </div>
@@ -73,6 +64,5 @@
             </div>
         </div>
     </footer>
-
 </body>
 </html>

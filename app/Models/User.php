@@ -12,7 +12,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
@@ -26,7 +25,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
@@ -36,7 +34,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -47,10 +44,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    // User model (app/Models/User.php)
+
 public function setProfilePicture($image)
 {
-    // Dosyayı public storage'a kaydedin
+
     $imageName = time() . '.' . $image->extension();
     $image->move(public_path('images'), $imageName);
     $this->profile_picture = $imageName;

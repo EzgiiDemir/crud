@@ -9,9 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Custom Styles for Dark Theme -->
+
     <style>
-        /* Koyu tema için stiller */
         .dark-theme {
             background-color: #121212;
             color: #ffffff;
@@ -47,8 +46,6 @@
     </style>
 </head>
 <body class="{{ Auth::check() ? Auth::user()->theme : 'dark' }} {{ Auth::check() ? 'text-orange-600' : '' }}">
-
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container">
             <div class="text-xl font-bold"><img src="{{ asset('images/kitten.png') }}" alt="Kitten" style="max-width: 50px;"></div>
@@ -85,41 +82,29 @@
             </div>
         </div>
     </nav>
-
     <div class="container mt-5">
         <div class="text-orange-600">
             @yield('content')
         </div>
     </div>
 
-    <!-- <footer class="bg-light text-orange-600 p-4 mt-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-sm">&copy; 2025 Ezgi Company</div>
-            <div class="space-x-6">
-                <a href="#" class="hover:text-gray-200 transition">Privacy Policy</a>
-                <a href="#" class="hover:text-gray-200 transition">Terms of Service</a>
-            </div>
-        </div>
-    </footer> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @php
     $settings = Auth::check()
         ? (json_decode(Auth::user()->settings, true) ?? ['notifications' => 'enabled', 'theme' => 'light'])
         : ['notifications' => 'enabled', 'theme' => 'light'];
-@endphp
+    @endphp
 
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const theme = "{{ $settings['theme'] }}";
-        // Sayfa yüklendiğinde, kullanıcının seçtiği temayı uygula
         if (theme === 'dark') {
             document.body.classList.add('dark-theme');
         } else {
             document.body.classList.add('light-theme');
         }
 
-        // Tema seçeneği değiştiğinde sayfayı güncelle
         document.getElementById("theme").addEventListener("change", function () {
             if (this.value === 'light') {
                 document.body.classList.remove("dark-theme");
@@ -131,6 +116,6 @@
         });
     });
 </script>
-
+@yield('scripts')
 </body>
 </html>
