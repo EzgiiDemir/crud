@@ -27,11 +27,20 @@
 
     <form class="space-y-4" method="POST" action="{{ route('login') }}">
         @csrf
-        <input required class="w-full bg-white border border-transparent rounded-xl p-4 shadow-md focus:border-orange-400 focus:outline-none" type="email" name="email" id="email" placeholder="E-mail">
+        <input required class="w-full bg-white border border-transparent rounded-xl p-4 shadow-md focus:border-orange-400 focus:outline-none" type="email" name="email" id="email" placeholder="E-mail" value="{{ old('email') }}">
+        @if($errors->has('email'))
+    <span class="text-red-500 text-sm">{{ $errors->first('email') }}</span>
+@endif
 
-        <input required class="w-full bg-white border border-transparent rounded-xl p-4 shadow-md focus:border-orange-400 focus:outline-none" type="password" name="password" id="password" placeholder="Password">
+        <input required class="w-full bg-white border border-transparent rounded-xl p-4 shadow-md focus:border-orange-400 focus:outline-none" type="password" name="password" id="password" placeholder="Password"  value="{{ old('password') }}">
+        @if($errors->has('password'))
+    <span class="text-red-500 text-sm">{{ $errors->first('password') }}</span>
+@endif
 
-        <input class="w-2/3 mx-auto block bg-orange-500  to-orange-500 text-white font-bold py-2 rounded-xl shadow-md transform transition-transform duration-200 hover:scale-105" type="submit" value="Login">
+        <input class="w-2/3 mx-auto block bg-orange-500  to-orange-500 text-white font-bold py-2 rounded-xl shadow-md transform transition-transform duration-200 hover:scale-105" type="submit" value="Login"  value="{{ old('login') }}">
+        @if($errors->has('login'))
+    <span class="text-red-500 text-sm block text-center">{{ $errors->first('login') }}</span>
+@endif
 
         <span class="block text-center text-sm mt-2"><a href="#" class="text-orange-600">Forgot Password?</a></span>
     </form>

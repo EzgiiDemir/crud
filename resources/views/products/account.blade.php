@@ -16,21 +16,17 @@
                     <form action="{{ route('profile.changePicture') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
-    <img src="{{ Auth::user()->profile_picture ?? 'https://www.papgift.com/wp-content/uploads/2022/11/Resim-Sanati-Turleri-ve-Ozellikleri-Nelerdir.jpg' }}"
+    <img src="{{ Auth::user()->profile_picture ?? 'https://static.vecteezy.com/system/resources/previews/020/765/399/large_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg' }}"
      class="d-block mx-auto rounded-circle"
      style="max-width: 100px;"
      alt="Profile Picture">
         <label for="profile_picture" class="form-label">Change Profile Picture</label>
         <input type="file" class="form-control" name="profile_picture" id="profile_picture" required>
     </div>
-    <button type="submit" class="btn btn-primary btn-sm">Upload New Picture</button>
+    <button type="submit" class="btn btn-primary btn-sm mb-3">Upload New Picture</button>
 </form>
 
 
-                        <div class="mt-3">
-                            <!-- Change Profile Picture Button (Modal veya yeni sayfa için yönlendirme) -->
-                            <a href="{{ route('profile.picture.change') }}" class="btn btn-dark btn-sm">Change Profile Picture</a>
-                        </div>
                     </div>
 
                     <hr>

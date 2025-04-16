@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-200 font-sans antialiased">
+<div class="flex flex-col items-center justify-center min-h-screen font-sans antialiased">
 
     <!-- Welcome Section -->
     <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg text-center">

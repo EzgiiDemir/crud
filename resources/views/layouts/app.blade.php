@@ -58,7 +58,7 @@
             <div class="navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-orange-600" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link text-orange-600" href="{{ route('login') }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-orange-600" href="{{ route('products.index') }}">Products</a>
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <footer class="bg-light text-orange-600 p-4 mt-8">
+    <!-- <footer class="bg-light text-orange-600 p-4 mt-8">
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-sm">&copy; 2025 Ezgi Company</div>
             <div class="space-x-6">
@@ -100,12 +100,15 @@
                 <a href="#" class="hover:text-gray-200 transition">Terms of Service</a>
             </div>
         </div>
-    </footer>
+    </footer> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @php
-    $settings = json_decode(Auth::user()->settings, true) ?? ['notifications' => 'enabled', 'theme' => 'light'];
+    $settings = Auth::check()
+        ? (json_decode(Auth::user()->settings, true) ?? ['notifications' => 'enabled', 'theme' => 'light'])
+        : ['notifications' => 'enabled', 'theme' => 'light'];
 @endphp
+
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const theme = "{{ $settings['theme'] }}";

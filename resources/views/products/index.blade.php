@@ -15,7 +15,7 @@
             <div class="card-body">
                 <form method="GET" action="{{ route('products.index') }}" class="mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="search" placeholder="Search by code or name" value="{{ request()->search }}">
+                    <input type="text" class="form-control placeholder-orange-500" name="search" placeholder="Search by code or name" value="{{ request()->search }}">
                         <button class="btn btn-dark" type="submit">Search</button>
                     </div>
                 </form>
@@ -41,41 +41,42 @@
                                 <td>{{ $product->quantity }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="post">
-                                        @csrf
-                                        @method('DELETE')
+                                <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: inline;">
+    @csrf
+    @method('DELETE')
 
-                                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-secondary btn-sm"><i class="bi bi-eye"></i> Show</a>
+    <a href="{{ route('products.show', $product->id) }}" class="btn btn-secondary btn-sm"><i class="bi bi-eye"></i> Show</a>
 
-                                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
+    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
 
-                                       <!-- Button trigger modal -->
-                                       <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $product->id }}">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </button>
-                                    </form>
-                                </td>
-                            </tr>
-                         <!-- Modal -->
-                         <div class="modal fade" id="deleteModal{{ $product->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $product->id }}" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteModalLabel{{ $product->id }}">Confirm Delete</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Are you sure you want to delete this product?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $product->id }}').submit();">
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $product->id }}">
+        <i class="bi bi-trash"></i> Delete
+    </button>
+</form>
+
+
+<div class="modal fade" id="deleteModal{{ $product->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $product->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-black" id="deleteModalLabel{{ $product->id }}">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-black">
+                Are you sure you want to delete this product?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger"
+                    onclick="event.preventDefault(); document.getElementById('delete-form-{{ $product->id }}').submit();">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center">
