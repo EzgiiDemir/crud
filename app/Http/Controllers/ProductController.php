@@ -24,8 +24,11 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->get();
-
-        return view('products.index', compact('products'));
+        $trashedProducts = Product::onlyTrashed()
+        ->where('user_id', Auth::id())
+        ->latest()
+        ->get();
+        return view('products.index', compact('products', 'trashedProducts'));
     }
 
     public function create(): View
@@ -76,12 +79,11 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         $this->authorizeAccess($product);
-        $product->delete();
+        $product->delete(); // artık soft delete
 
         return redirect()->route('products.index')
             ->withSuccess('The product has been deleted.');
     }
-
 
     protected function authorizeAccess(Product $product)
     {
@@ -89,4 +91,14 @@ class ProductController extends Controller
             abort(403, 'You are not authorized to access this product.');
         }
     }
+    public function restore($id): RedirectResponse
+{
+    $product = Product::onlyTrashed()->findOrFail($id);
+    $this->authorizeAccess($product);
+    $product->restore();
+
+    return redirect()->route('products.index')
+        ->withSuccess('Product has been restored.');
+}
+
 }

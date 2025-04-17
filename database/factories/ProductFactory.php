@@ -24,4 +24,23 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence(),
         ];
     }
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
+
+public function likes()
+{
+    return $this->hasMany(Like::class);
+}
+
+public function favoritedBy()
+{
+    return $this->belongsToMany(User::class, 'favorites');
+}
 }
