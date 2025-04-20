@@ -81,3 +81,6 @@ Route::get('/api/countries',       [FeeCalculatorController::class, 'countries']
 Route::get('/api/terms',           [FeeCalculatorController::class, 'terms']);
 // ...
 Route::post('/api/calculate',      [FeeCalculatorController::class, 'calculate']);
+use App\Http\Controllers\ProductRecommendationController;
+Route::get('/investment-test', [ProductRecommendationController::class, 'index']);
+Route::post('/api/recommend-products', [ProductRecommendationController::class, 'recommend']);
