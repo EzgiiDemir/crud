@@ -64,6 +64,12 @@
                     <li class="nav-item">
                         <a class="nav-link text-orange-600" href="{{ route('products.market') }}">Market</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-orange-600" href="{{ route('fee_calculator') }}">Fee Calculator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-orange-600" href="{{ route('payment') }}">Payment</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-orange-600" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle"></i> Profile

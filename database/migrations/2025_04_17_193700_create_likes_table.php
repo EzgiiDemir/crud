@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favorites', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('product_id')->constrained();
+        Schema::create('likes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            $table->primary(['user_id', 'product_id']);
         });
     }
 
@@ -24,11 +24,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::create('favorites', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('product_id')->constrained();
+        Schema::create('likes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            $table->primary(['user_id', 'product_id']);
         });
     }
 };

@@ -109,5 +109,78 @@ class ProductController extends Controller
     return redirect()->route('products.index')
         ->withSuccess('Product has been restored.');
 }
+    public function rate(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'rating' => 'required|integer|between:1,5',
+        ]);
+
+        $product = Product::find($validated['product_id']);
+
+        // Kullanıcının daha önce bu ürünü değerlendirmemiş olduğunu kontrol et
+        $existingRating = $product->ratings()->where('user_id', auth()->id())->first();
+
+        if ($existingRating) {
+            // Eğer var ise, eski yorumu güncelle
+            $existingRating->update(['rating' => $validated['rating']]);
+        } else {
+            // Eğer yoksa, yeni bir değerlendirme ekle
+            $product->ratings()->create([
+                'user_id' => auth()->id(),
+                'rating' => $validated['rating'],
+            ]);
+        }
+
+        // Ürünün ortalama puanını hesapla
+        $averageRating = $product->ratings()->avg('rating');
+
+        // Ortalama puanı güncelle
+        $product->update(['average_rating' => round($averageRating, 1)]);
+
+        return response()->json(['new_avg_rating' => $product->average_rating]);
+    }
+    public function like(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $product = Product::find($validated['product_id']);
+
+        // Kullanıcının daha önce bu ürünü beğenip beğenmediğini kontrol et
+        $like = $product->likes()->where('user_id', auth()->id())->first();
+
+        if ($like) {
+            // Eğer kullanıcı beğenmişse, beğenisini kaldır
+            $like->delete();
+            $likeCount = $product->likes()->count();
+        } else {
+            // Eğer beğenmemişse, beğeniyi ekle
+            $product->likes()->create(['user_id' => auth()->id()]);
+            $likeCount = $product->likes()->count();
+        }
+
+        return response()->json(['new_like_count' => $likeCount]);
+    }
+    public function comment(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'text' => 'required|string|max:500',
+        ]);
+
+        $product = Product::find($validated['product_id']);
+
+        $comment = $product->comments()->create([
+            'user_id' => auth()->id(),
+            'text' => $validated['text'],
+        ]);
+
+        // Yorum sayısını güncelle
+        $commentCount = $product->comments()->count();
+
+        return response()->json(['new_comment_count' => $commentCount]);
+    }
 
 }

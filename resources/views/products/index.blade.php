@@ -42,7 +42,7 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                 @if($product->image)
-                                <img src="{{ asset('storage/'. $product->image) }}" alt="Product" style="max-width: 100px;">
+                                <img src="{{ asset('storage/'. $product->image) }}" alt="Product" style="max-width: 30%;" class="w-full h-auto object-cover rounded-lg">
                                 @else
                                     <span>No Image</span>
                                 @endif

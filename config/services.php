@@ -30,5 +30,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'fee_calculator' => [
+        'base_uri' => env('CIU_FEE_CALC_URL', 'https://sis.ciu.edu.tr/service/fee-calculator/'),
+        'timeout'  => 10,
+    ],
+
 
 ];

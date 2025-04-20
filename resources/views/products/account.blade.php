@@ -30,7 +30,7 @@
                     <hr>
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" value="{{ Auth::user()->name }}" disabled>
+                        <input type="text" class="form-control " id="name" value="{{ Auth::user()->name }}" disabled>
                     </div>
 
                     <div class="form-group">

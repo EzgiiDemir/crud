@@ -43,13 +43,19 @@ Route::post('register', [RegisterController::class, 'register'])->name('register
 Route::resource('products', ProductController::class);
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::post('/products', [ProductController::class, 'index'])->name('products.index');
+Route::post('/products', [ProductController::class, 'index'])->name('products.store');
 
 
 // Static Views
 Route::get('/create', function () {
     return view('products.create');
 })->name('create');
-
+Route::get('/fee_calculator', function () {
+    return view('products.fee_calculator');
+})->name('fee_calculator');
+Route::get('/payment', function () {
+    return view('products.payment');
+})->name('payment');
 Route::get('/profile/picture/change', [ProfileController::class, 'changePicture'])->name('profile.picture.change');
 Route::get('/profile/change-picture', [ProfileController::class, 'showChangePictureForm'])->name('profile.change-picture');
 Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update-picture');
@@ -66,3 +72,12 @@ Route::controller(MarketController::class)->group(function () {
     Route::post('/market/{product}/like', 'toggleLike')->name('market.like');
     Route::post('/market/{product}/favorite', 'toggleFavorite')->name('market.favorite');
 });
+Route::resource('products', ProductController::class);
+Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+Route::post('/products/rate', [ProductController::class, 'rate'])->name('products.rate');
+Route::post('/products/like', [ProductController::class, 'like'])->name('products.like');
+Route::post('/products/comment', [ProductController::class, 'comment'])->name('products.comment');
+Route::get('/api/countries',       [FeeCalculatorController::class, 'countries']);
+Route::get('/api/terms',           [FeeCalculatorController::class, 'terms']);
+// ...
+Route::post('/api/calculate',      [FeeCalculatorController::class, 'calculate']);
