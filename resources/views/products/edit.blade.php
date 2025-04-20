@@ -20,9 +20,26 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('products.update', $product->id) }}" method="post">
+                <form action="{{ route('products.update', $product->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method("PUT")
+
+
+
+                    <div class="mb-3 row">
+    <label for="image" class="col-md-4 col-form-label text-md-end text-start">Image</label>
+    <div class="col-md-6">
+        <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
+        @error('image')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+            <div class="mt-2">
+            @if($product->image)
+            <img src="{{ asset('storage/'. $product->image) }}" alt="Product" style="max-width: 100px;">
+            @endif
+         </div>
+    </div>
+</div>
 
                     <div class="mb-3 row">
                         <label for="code" class="col-md-4 col-form-label text-md-end text-start">Code</label>
@@ -63,6 +80,21 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="mb-3 row">
+    <label for="currency" class="col-md-4 col-form-label text-md-end text-start">Currency</label>
+    <div class="col-md-6">
+        <select class="form-control @error('currency') is-invalid @enderror" id="currency" name="currency">
+            <option value="USD" {{ $product->currency == 'USD' ? 'selected' : '' }}>USD ($)</option>
+            <option value="TRY" {{ $product->currency == 'TRY' ? 'selected' : '' }}>TRY (₺)</option>
+            <option value="GBP" {{ $product->currency == 'GBP' ? 'selected' : '' }}>GBP (£)</option>
+            <option value="EUR" {{ $product->currency == 'EUR' ? 'selected' : '' }}>EUR (€)</option>
+
+        </select>
+        @error('currency')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+</div>
 
                     <div class="mb-3 row">
                         <label for="description" class="col-md-4 col-form-label text-md-end text-start">Description</label>

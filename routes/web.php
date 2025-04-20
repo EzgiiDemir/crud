@@ -42,6 +42,7 @@ Route::post('register', [RegisterController::class, 'register'])->name('register
 // Product Routes
 Route::resource('products', ProductController::class);
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::post('/products', [ProductController::class, 'index'])->name('products.index');
 
 
 // Static Views

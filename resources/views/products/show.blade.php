@@ -15,7 +15,12 @@
                 </div>
             </div>
             <div class="card-body">
-
+            <div class="row mb-3">
+                    <label for="image" class="col-12 col-md-4 col-form-label text-md-end text-start"><strong>Image:</strong></label>
+                    <div class="col-12 col-md-6" style="line-height: 35px;">
+                        {{ $product->image }}
+                    </div>
+                </div>
                 <div class="row mb-3">
                     <label for="code" class="col-12 col-md-4 col-form-label text-md-end text-start"><strong>Code:</strong></label>
                     <div class="col-12 col-md-6" style="line-height: 35px;">
@@ -43,7 +48,12 @@
                         {{ $product->price }}
                     </div>
                 </div>
-
+                <div class="row mb-3">
+                    <label for="currency" class="col-12 col-md-4 col-form-label text-md-end text-start"><strong>Currency:</strong></label>
+                    <div class="col-12 col-md-6" style="line-height: 35px;">
+                        {{ $product->currency}}
+                    </div>
+                </div>
                 <div class="row mb-3">
                     <label for="description" class="col-12 col-md-4 col-form-label text-md-end text-start"><strong>Description:</strong></label>
                     <div class="col-12 col-md-6" style="line-height: 35px;">

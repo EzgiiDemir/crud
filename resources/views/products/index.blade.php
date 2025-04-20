@@ -27,10 +27,12 @@
                     <thead>
                         <tr>
                             <th>S#</th>
+                            <th>Image</th>
                             <th>Code</th>
                             <th>Name</th>
                             <th>Quantity</th>
                             <th>Price</th>
+                            <th>Currency</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -38,10 +40,18 @@
                         @foreach ($products as $index => $product)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
+                                <td>
+                                @if($product->image)
+                                <img src="{{ asset('storage/'. $product->image) }}" alt="Product" style="max-width: 100px;">
+                                @else
+                                    <span>No Image</span>
+                                @endif
+                                </td>
                                 <td>{{ $product->code }}</td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->quantity }}</td>
                                 <td>{{ $product->price }}</td>
+                                <td>{{ $product->currency }}</td>
                                 <td>
                                     <form id="delete-form-{{ $product->id }}" action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: inline;">
                                         @csrf

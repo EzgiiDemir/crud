@@ -15,8 +15,22 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('products.store') }}" method="post">
+                <form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <div class="mb-3 row">
+                        <label for="image" class="col-md-4 col-form-label text-md-end text-start">Image</label>
+                        <div class="col-md-6">
+                            <input
+                                type="file"
+                                class="form-control @error('image') is-invalid @enderror"
+                                id="image"
+                                name="image"
+                            >
+                            @error('image')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="mb-3 row">
                         <label for="code" class="col-md-4 col-form-label text-md-end text-start">Code</label>
                         <div class="col-md-6">
@@ -49,6 +63,25 @@
                         <div class="col-md-6">
                           <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}">
                             @error('price')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="currency" class="col-md-4 col-form-label text-md-end text-start">Currency</label>
+                        <div class="col-md-6">
+                            <select
+                                class="form-select @error('currency') is-invalid @enderror"
+                                id="currency"
+                                name="currency"
+                            >
+                                <option value="">Select Currency</option>
+                                <option value="USD" {{ old('currency')=='USD' ? 'selected' : '' }}>USD</option>
+                                <option value="TRY" {{ old('currency')=='TRY' ? 'selected' : '' }}>TRY</option>
+                                <option value="STG" {{ old('currency')=='STG' ? 'selected' : '' }}>STG</option>
+                                <option value="EUR" {{ old('currency')=='EUR' ? 'selected' : '' }}>EUR</option>
+                            </select>
+                            @error('currency')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>

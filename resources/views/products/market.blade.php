@@ -57,10 +57,7 @@
             <div class="card product-card h-100">
                 <!-- Ürün Resmi -->
                 <div class="product-image-container">
-                <!-- src="https://via.placeholder.com/300x200?text={{ urlencode($product->name) }}" -->
-                <!-- alt="{{ $product->name }}" -->
-                    <img
-                         class="card-img-top bg-dark" >
+                <img src="{{ asset('storage/'.$product->image) }}" alt="Product"  class="card-img-top">
                     <div class="product-actions">
                         <button class="btn btn-sm btn-light rounded-circle action-btn favorite-btn"
                                 data-product-id="{{ $product->id }}">
@@ -92,7 +89,7 @@
                             <i class="far fa-star text-warning"></i>
                             <span class="small  ml-1">(24)</span>
                         </div>
-                        <h5 class="text-success mb-0">${{ number_format($product->price, 2) }}</h5>
+                        <h5 class="text-success mb-0">{{ number_format($product->price, 2) }}  <td>{{ $product->currency }}</td></h5>
                     </div>
 
                     <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
@@ -116,6 +113,8 @@
                         </button>
                     </div>
                 </div>
+
+
             </div>
         </div>
 

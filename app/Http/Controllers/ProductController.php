@@ -39,10 +39,13 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         try {
-            Product::create(array_merge(
-                $request->validated(),
-                ['user_id' => Auth::id()]
-            ));
+            $data = $request->validated();
+            $data['user_id'] = Auth::id();
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            Product::create($data);
 
             return redirect()->route('products.index')
                 ->withSuccess('Product successfully added.');
@@ -69,13 +72,19 @@ class ProductController extends Controller
         $this->authorizeAccess($product);
 
         try {
-            $product->update($request->validated());
-            return redirect()->back()->withSuccess('Product updated.');
+            $data = $request->validated();
+
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('products', 'public');
+            }
+
+            $product->update($data);
+
+            return redirect('products')->withSuccess('Product updated.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors('Update error: ' . $e->getMessage());
         }
     }
-
     public function destroy(Product $product): RedirectResponse
     {
         $this->authorizeAccess($product);
