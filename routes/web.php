@@ -77,6 +77,7 @@ Route::get('/products/search', [ProductController::class, 'search'])->name('prod
 Route::post('/products/rate', [ProductController::class, 'rate'])->name('products.rate');
 Route::post('/products/like', [ProductController::class, 'like'])->name('products.like');
 Route::post('/products/comment', [ProductController::class, 'comment'])->name('products.comment');
+Route::get('/products/comment', [ProductController::class, 'comment'])->name('products.comment');
 Route::get('/api/countries',       [FeeCalculatorController::class, 'countries']);
 Route::get('/api/terms',           [FeeCalculatorController::class, 'terms']);
 // ...
@@ -84,3 +85,10 @@ Route::post('/api/calculate',      [FeeCalculatorController::class, 'calculate']
 use App\Http\Controllers\ProductRecommendationController;
 Route::get('/investment-test', [ProductRecommendationController::class, 'index']);
 Route::post('/api/recommend-products', [ProductRecommendationController::class, 'recommend']);
+Route::post('/rate-product', [ProductController::class, 'rateProduct']);
+Route::post('/product/{id}/increase', [ProductController::class, 'increase']);
+Route::post('/product/{id}/decrease', [ProductController::class, 'decrease']);
+Route::get('/product/{id}/increase', [ProductController::class, 'increase']);
+Route::get('/product/{id}/decrease', [ProductController::class, 'decrease']);
+Route::get('/rate-product', [ProductController::class, 'rateProduct']);
+Route::post('/product/{id}/comment', [ProductController::class, 'postComment']);

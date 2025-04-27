@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class ProductController extends Controller
 {
     public function index(Request $request): View
@@ -109,78 +110,65 @@ class ProductController extends Controller
     return redirect()->route('products.index')
         ->withSuccess('Product has been restored.');
 }
-    public function rate(Request $request)
+    public function rateProduct(Request $request)
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'rating' => 'required|integer|between:1,5',
+        $product = Product::findOrFail($request->product_id);
+
+        // Ratingi kaydet (örnek basit bir yapı)
+        $product->ratings()->create([
+            'rating' => $request->rating,
+            'user_id' => auth()->id(),
         ]);
 
-        $product = Product::find($validated['product_id']);
+        // Yeni ortalamayı hesapla
+        $newAverage = $product->ratings()->avg('rating');
 
-        // Kullanıcının daha önce bu ürünü değerlendirmemiş olduğunu kontrol et
-        $existingRating = $product->ratings()->where('user_id', auth()->id())->first();
+        $product->average_rating = $newAverage;
+        $product->save();
 
-        if ($existingRating) {
-            // Eğer var ise, eski yorumu güncelle
-            $existingRating->update(['rating' => $validated['rating']]);
-        } else {
-            // Eğer yoksa, yeni bir değerlendirme ekle
-            $product->ratings()->create([
-                'user_id' => auth()->id(),
-                'rating' => $validated['rating'],
-            ]);
-        }
-
-        // Ürünün ortalama puanını hesapla
-        $averageRating = $product->ratings()->avg('rating');
-
-        // Ortalama puanı güncelle
-        $product->update(['average_rating' => round($averageRating, 1)]);
-
-        return response()->json(['new_avg_rating' => $product->average_rating]);
+        return response()->json(['new_average_rating' => number_format($newAverage, 1)]);
     }
-    public function like(Request $request)
+
+
+
+    public function increase($id): \Illuminate\Http\JsonResponse
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-        ]);
+        $product = Product::findOrFail($id);
+        $product->like_count = ($product->like_count ?? 0) + 1;
+        $product->save();
 
-        $product = Product::find($validated['product_id']);
-
-        // Kullanıcının daha önce bu ürünü beğenip beğenmediğini kontrol et
-        $like = $product->likes()->where('user_id', auth()->id())->first();
-
-        if ($like) {
-            // Eğer kullanıcı beğenmişse, beğenisini kaldır
-            $like->delete();
-            $likeCount = $product->likes()->count();
-        } else {
-            // Eğer beğenmemişse, beğeniyi ekle
-            $product->likes()->create(['user_id' => auth()->id()]);
-            $likeCount = $product->likes()->count();
-        }
-
-        return response()->json(['new_like_count' => $likeCount]);
+        return response()->json(['like_count' => $product->like_count]);
     }
-    public function comment(Request $request)
+
+    public function decrease($id): \Illuminate\Http\JsonResponse
+    {
+        $product = Product::findOrFail($id);
+        $product->like_count = max(($product->like_count ?? 0) - 1, 0); // Like 0'ın altına düşmesin
+        $product->save();
+
+        return response()->json(['like_count' => $product->like_count]);
+    }
+
+    public function comment(Request $request): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'text' => 'required|string|max:500',
+            'content' => 'required|string|max:500',
         ]);
 
         $product = Product::find($validated['product_id']);
 
+        // Add the comment
         $comment = $product->comments()->create([
             'user_id' => auth()->id(),
-            'text' => $validated['text'],
+            'content' => $validated['content'],
         ]);
 
-        // Yorum sayısını güncelle
+        // Update the comment count
         $commentCount = $product->comments()->count();
 
         return response()->json(['new_comment_count' => $commentCount]);
     }
+
 
 }

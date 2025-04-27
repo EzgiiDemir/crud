@@ -64,9 +64,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-orange-600" href="{{ route('products.market') }}">Market</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-orange-600" href="{{ route('fee_calculator') }}">Fee Calculator</a>
-                    </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link text-orange-600" href="{{ route('fee_calculator') }}">Fee Calculator</a>--}}
+{{--                    </li>--}}
                     <li class="nav-item">
                         <a class="nav-link text-orange-600" href="{{ route('payment') }}">Payment</a>
                     </li>

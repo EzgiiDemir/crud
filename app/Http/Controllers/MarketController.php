@@ -58,7 +58,7 @@ class MarketController extends Controller
     }
 
     // Yorum ekleme
-    public function addComment(Request $request, Product $product)
+    public function addComment(Request $request, Product $product): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'content' => 'required|string|max:500'
@@ -73,7 +73,7 @@ class MarketController extends Controller
     }
 
     // Beğeni ekleme/kaldırma
-    public function toggleLike(Product $product)
+    public function toggleLike(Product $product): \Illuminate\Http\RedirectResponse
     {
         $like = $product->likes()->where('user_id', Auth::id())->first();
 
@@ -89,7 +89,7 @@ class MarketController extends Controller
     }
 
     // Favorilere ekleme
-    public function toggleFavorite(Product $product)
+    public function toggleFavorite(Product $product): \Illuminate\Http\RedirectResponse
     {
         $user = Auth::user();
 

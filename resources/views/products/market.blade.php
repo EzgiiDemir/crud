@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="container py-5">
         <!-- Market Başlık ve Arama -->
@@ -75,18 +78,25 @@
                         <!-- Ürün Footer (Aksiyon Butonları) -->
                         <div class="card-footer bg-white border-top-0">
                             <div class="d-flex justify-content-between">
-                                <button class="btn btn-outline-primary btn-sm like-btn"
-                                        data-product-id="{{ $product->id }}">
-                                    <i class="far fa-thumbs-up"></i>
-                                    <span class="like-count" id="like-count-{{ $product->id }}">{{ $product->like_count ?? '0' }}</span>
-                                </button>
+                                <div class="d-flex">
+                                    <button class="btn btn-outline-primary btn-sm like-btn" data-product-id="{{ $product->id }}">
+                                        <i class="far fa-thumbs-up"></i>
+                                        <span class="like-count" id="like-count-{{ $product->id }}">{{ $product->like_count ?? '0' }}</span>
+                                    </button>
+
+                                    <button class="btn btn-outline-danger btn-sm dislike-btn ml-2" data-product-id="{{ $product->id }}">
+                                        <i class="far fa-thumbs-down"></i>
+                                    </button>
+                                </div>
+
                                 <button class="btn btn-outline-secondary btn-sm comment-btn"
                                         data-toggle="modal" data-target="#commentModal-{{ $product->id }}">
                                     <i class="far fa-comment"></i>
                                     <span id="comment-count-{{ $product->id }}">{{ $product->comments_count ?? '0' }}</span>
                                 </button>
+
                                 <button class="btn btn-primary btn-sm order-btn">
-                                    <i class="fas fa-shopping-cart"></i> Order Now
+                                    <i class="fas fa-shopping-cart"></i><a href="{{ route('payment') }}">Order Now </a>
                                 </button>
                             </div>
                         </div>
@@ -108,14 +118,18 @@
                                 <!-- Yorum Listesi -->
                                 <div class="comments-section mb-4">
                                     @foreach($product->comments as $comment)
-                                        <div class="media mb-3">
-                                            <img src="https://via.placeholder.com/50" class="mr-3 rounded-circle" alt="User">
-                                            <div class="media-body">
-                                                <h6 class="mt-0">{{ $comment->user->name }}</h6>
-                                                <p class="small">{{ $comment->created_at->diffForHumans() }}</p>
-                                                <p>{{ $comment->text }}</p>
+                                        <div class="d-flex align-items-start p-3 mb-3 rounded shadow-sm" style="background-color: #f9f9f9;">
+                                            <img src="{{ Auth::user()->profile_picture ?? 'https://static.vecteezy.com/system/resources/previews/020/765/399/large_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg' }}"
+                                                 class="rounded-circle me-3"
+                                                 style="width: 50px; height: 50px; object-fit: cover;"
+                                                 alt="Profile Picture">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 fw-bold">{{ $comment->user->name }}</h6>
+                                                <p class="mb-2 p-2 rounded text-white" style="background-color: #0d6efd;">{{ $comment->content }}</p>
+                                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                                             </div>
                                         </div>
+
                                     @endforeach
                                 </div>
 
@@ -124,25 +138,25 @@
                                     <div class="form-group">
                                         <textarea class="form-control" rows="3" placeholder="Write your comment..."></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Post Comment</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            @empty
-                <div class="col-12">
-                    <div class="alert alert-info text-center">
-                        <i class="fas fa-info-circle fa-2x mb-3"></i>
-                        <h4>No products found</h4>
-                        <p>There are currently no products available in the market.</p>
-                        @auth
-                            <a href="{{ route('products.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Add Your First Product
-                            </a>
-                        @endauth
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-info-circle fa-2x mb-3"></i>
+                            <h4>No products found</h4>
+                            <p>There are currently no products available in the market.</p>
+                            @auth
+                                <a href="{{ route('products.create') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Add Your First Product
+                                </a>
+                            @endauth
+                        </div>
                     </div>
-                </div>
             @endforelse
         </div>
 
@@ -157,34 +171,105 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Yıldız değerlendirmesi işlemi
-            document.querySelectorAll('.star-rating').forEach(star => {
-                star.addEventListener('click', function() {
-                    const productId = this.dataset.productId;
-                    const rating = this.dataset.rating;
-                    rateProduct(productId, rating);
+            $(document).ready(function() {
+                $('.rating-star').on('click', function() {
+                    var rating = $(this).data('rating');
+                    var productId = $(this).data('product-id');
+
+                    $.ajax({
+                        url: '/rate-product', // POST isteği atacağımız route
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            rating: rating,
+                            product_id: productId
+                        },
+                        success: function(response) {
+                            // Başarılı olursa ortalama rating güncelleyebilirsin
+                            $('#average-rating-' + productId).text(response.new_average_rating);
+                        },
+                        error: function() {
+                            alert('Error saving rating.');
+                        }
+                    });
                 });
             });
 
-            // Beğeni işlemi
-            document.querySelectorAll('.like-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.dataset.productId;
-                    toggleLike(productId);
+            $(document).ready(function() {
+                $('.like-btn').on('click', function() {
+                    var productId = $(this).data('product-id');
+
+                    $.ajax({
+                        url: '/product/' + productId + '/increase',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            $('#like-count-' + productId).text(response.like_count);
+                        },
+                        error: function() {
+                            alert('Failed to increase like.');
+                        }
+                    });
+                });
+
+                $('.dislike-btn').on('click', function() {
+                    var productId = $(this).data('product-id');
+
+                    $.ajax({
+                        url: '/product/' + productId + '/decrease',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            $('#like-count-' + productId).text(response.like_count);
+                        },
+                        error: function() {
+                            alert('Failed to decrease like.');
+                        }
+                    });
                 });
             });
 
-            // Yorum gönderme işlemi
-            document.querySelectorAll('.comment-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.dataset.productId;
-                    const commentText = document.querySelector(`#comment-text-${productId}`).value;
+            function postComment(productId, commentText) {
+                fetch('/products/comment', { // Ensure this matches the correct route
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ product_id: productId, content: commentText })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.new_comment_count !== undefined) {
+                            document.getElementById(`comment-count-${productId}`).innerText = data.new_comment_count;
+                        }
+                    })  .catch(error => {
+                    console.error('Error posting comment:', error);
+                });
+            }
+
+            document.querySelectorAll('.comment-form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const productId = this.getAttribute('data-product-id');
+                    const commentText = this.querySelector('textarea').value;
+
                     postComment(productId, commentText);
+
+                    // Optionally clear the form after submission
+                    this.querySelector('textarea').value = '';
                 });
             });
+
 
             // Yıldız değerlendirmesi işlevi
             function rateProduct(productId, rating) {
@@ -222,24 +307,15 @@
                     });
             }
 
-            // Yorum gönderme işlevi
-            function postComment(productId, commentText) {
-                fetch('/products/comment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ product_id: productId, text: commentText })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.new_comment_count !== undefined) {
-                            document.getElementById(`comment-count-${productId}`).innerText = data.new_comment_count;
-                        }
-                    });
+
+        });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+
     </script>
 
     <style>
@@ -326,6 +402,9 @@
             .action-btn {
                 opacity: 1;
             }
+        }
+        ::placeholder{
+            color: #007bff !important;
         }
     </style>
 
