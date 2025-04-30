@@ -164,11 +164,25 @@ class ProductController extends Controller
             'content' => $validated['content'],
         ]);
 
+        // Load user relationship (name, profile_picture)
+        $comment->load('user');
+
         // Update the comment count
         $commentCount = $product->comments()->count();
 
-        return response()->json(['new_comment_count' => $commentCount]);
+        return response()->json([
+            'new_comment_count' => $commentCount,
+            'comment' => [
+                'content' => $comment->content,
+                'created_at' => $comment->created_at->diffForHumans(),
+                'user' => [
+                    'name' => $comment->user->name,
+                    'profile_picture' => $comment->user->profile_picture ?? 'https://static.vecteezy.com/system/resources/previews/020/765/399/large_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg',
+                ],
+            ]
+        ]);
     }
+
 
 
 }

@@ -39,7 +39,18 @@
                     <div class="card product-card h-100">
                         <!-- Ürün Resmi -->
                         <div class="product-image-container">
-                            <img src="{{ asset('storage/'.$product->image) }}" alt="Product"  class="w-100 h-auto object-cover rounded-lg card-img-top">
+                            <!-- Küçük Resim -->
+                            <img src="{{ asset('storage/'.$product->image) }}" alt="Product"
+                                 class="w-100 h-auto object-cover rounded-lg card-img-top"
+                                 style="cursor: pointer;"
+                                 onclick="openImageModal('{{ asset('storage/'.$product->image) }}')">
+
+                            <!-- Modal Yapısı -->
+                            <div id="imageModal" style="display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+                                <span onclick="closeImageModal()" style="position: absolute; top: 20px; right: 40px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
+                                <img id="modalImage" src="" style="max-width: 50%; max-height: 50%; border-radius: 8px;" alt="products">
+                            </div>
                             <div class="product-actions">
                                 <button class="btn btn-sm btn-light rounded-circle action-btn favorite-btn"
                                         data-product-id="{{ $product->id }}">
@@ -178,8 +189,8 @@
             // Yıldız değerlendirmesi işlemi
             $(document).ready(function() {
                 $('.rating-star').on('click', function() {
-                    var rating = $(this).data('rating');
-                    var productId = $(this).data('product-id');
+                    const rating = $(this).data('rating');
+                    const productId = $(this).data('product-id');
 
                     $.ajax({
                         url: '/rate-product', // POST isteği atacağımız route
@@ -202,7 +213,7 @@
 
             $(document).ready(function() {
                 $('.like-btn').on('click', function() {
-                    var productId = $(this).data('product-id');
+                    const productId = $(this).data('product-id');
 
                     $.ajax({
                         url: '/product/' + productId + '/increase',
@@ -220,7 +231,7 @@
                 });
 
                 $('.dislike-btn').on('click', function() {
-                    var productId = $(this).data('product-id');
+                    const productId = $(this).data('product-id');
 
                     $.ajax({
                         url: '/product/' + productId + '/decrease',
@@ -238,8 +249,8 @@
                 });
             });
 
-            function postComment(productId, commentText) {
-                fetch('/products/comment', { // Ensure this matches the correct route
+            function postComment(productId, commentText, callback) {
+                fetch('/products/comment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -252,23 +263,50 @@
                         if (data.new_comment_count !== undefined) {
                             document.getElementById(`comment-count-${productId}`).innerText = data.new_comment_count;
                         }
-                    })  .catch(error => {
-                    console.error('Error posting comment:', error);
-                });
+
+                        if (data.comment) {
+                            callback(data.comment); // Yeni yorumu callback'e ilet
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error posting comment:', error);
+                    });
             }
+
 
             document.querySelectorAll('.comment-form').forEach(form => {
                 form.addEventListener('submit', function(event) {
                     event.preventDefault();
                     const productId = this.getAttribute('data-product-id');
-                    const commentText = this.querySelector('textarea').value;
+                    const textarea = this.querySelector('textarea');
+                    const commentText = textarea.value;
 
-                    postComment(productId, commentText);
+                    if (!commentText.trim()) return;
 
-                    // Optionally clear the form after submission
-                    this.querySelector('textarea').value = '';
+                    postComment(productId, commentText, function(comment) {
+                        const commentsSection = document.querySelector(`#commentModal-${productId} .comments-section`);
+
+                        const commentHTML = `
+                <div class="d-flex align-items-start p-3 mb-3 rounded shadow-sm" style="background-color: #f9f9f9;">
+                    <img src="${comment.user.profile_picture ?? 'https://static.vecteezy.com/system/resources/previews/020/765/399/large_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg'}"
+                         class="rounded-circle me-3"
+                         style="width: 50px; height: 50px; object-fit: cover;"
+                         alt="Profile Picture">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1 fw-bold">${comment.user.name}</h6>
+                        <p class="mb-2 p-2 rounded text-white" style="background-color: #0d6efd;">${comment.content}</p>
+                        <small class="text-muted">just now</small>
+                    </div>
+                </div>
+            `;
+
+                        commentsSection.insertAdjacentHTML('afterbegin', commentHTML); // En üste ekle
+                    });
+
+                    textarea.value = ''; // Temizle
                 });
             });
+
 
 
             // Yıldız değerlendirmesi işlevi
@@ -317,35 +355,41 @@
 
 
     </script>
+    <script>
+        function openImageModal(imageUrl) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Escape tuşuyla da kapansın:
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeImageModal();
+            }
+        });
+    </script>
 
     <style>
         .product-card {
             border-radius: 10px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid rgba(0,0,0,0.1);
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
 
         .product-image-container {
             position: relative;
             overflow: hidden;
-            height: 200px;
+            height: 300px;
         }
 
         .product-image-container img {
             object-fit: cover;
-            width: 100%;
             height: 100%;
-            transition: transform 0.5s ease;
-        }
-
-        .product-card:hover .product-image-container img {
-            transform: scale(1.05);
         }
 
         .product-actions {
