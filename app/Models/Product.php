@@ -49,7 +49,9 @@ class Product extends Model
         return $this->hasMany(Rating::class);
     }
 
-
-
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 
 }

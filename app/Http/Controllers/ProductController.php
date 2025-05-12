@@ -9,7 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -42,19 +42,26 @@ class ProductController extends Controller
         try {
             $data = $request->validated();
             $data['user_id'] = Auth::id();
+
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('products', 'public');
             }
 
-            Product::create($data);
+            $product = Product::create($data);
+
+            if ($request->has('category_ids')) {
+                $categories = Category::find($request->category_ids);
+                $product->categories()->attach($categories);
+            }
 
             return redirect()->route('products.index')
                 ->withSuccess('Product successfully added.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->withErrors('An error occurred while adding a product: ' . $e->getMessage());
+                ->withErrors('An error occurred while adding the product: ' . $e->getMessage());
         }
     }
+
 
     public function show(Product $product): View
     {
@@ -182,7 +189,16 @@ class ProductController extends Controller
             ]
         ]);
     }
+    public function removeCategory($productId, $categoryId): RedirectResponse
+    {
+        $product = Product::findOrFail($productId);
+        $category = Category::findOrFail($categoryId);
 
+        $product->categories()->detach($categoryId);
+
+        return redirect()->route('products.index')
+            ->withSuccess('Category removed from product.');
+    }
 
 
 }

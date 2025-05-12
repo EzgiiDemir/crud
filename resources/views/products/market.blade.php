@@ -39,7 +39,6 @@
                     <div class="card product-card h-100">
                         <!-- Ürün Resmi -->
                         <div class="product-image-container">
-                            <!-- Küçük Resim -->
                             <img src="{{ asset('storage/'.$product->image) }}" alt="Product"
                                  class="w-100 h-auto object-cover rounded-lg card-img-top"
                                  style="cursor: pointer;"
@@ -64,9 +63,9 @@
                                 <span class="badge badge-success new-badge">NEW</span>
                             @endif
                         </div>
-                        <meta name="csrf-token" content="{{ csrf_token() }}">
+
                         <!-- Ürün Detayları -->
-                        <div class="card-body ">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h5 class="card-title mb-0">{{ $product->name }}</h5>
                                 <span class="badge badge-primary bg-dark">{{ $product->code }}</span>
@@ -84,6 +83,13 @@
                             </div>
 
                             <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
+
+                            <!-- Ürün Kategorileri -->
+                            <p>Categories: Demo
+                                @foreach($product->categories as $category)
+                                    {{ $category->name }}@if(!$loop->last), @endif
+                                @endforeach
+                            </p>
                         </div>
 
                         <!-- Ürün Footer (Aksiyon Butonları) -->
@@ -113,61 +119,19 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Yorum Modalı (Her Ürün İçin) -->
-                <div class="modal fade" id="commentModal-{{ $product->id }}" tabindex="-1" role="dialog"
-                     aria-labelledby="commentModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="commentModalLabel">Comments for {{ $product->name }}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Yorum Listesi -->
-                                <div class="comments-section mb-4">
-                                    @foreach($product->comments as $comment)
-                                        <div class="d-flex align-items-start p-3 mb-3 rounded shadow-sm" style="background-color: #f9f9f9;">
-                                            <img src="{{ Auth::user()->profile_picture ?? 'https://static.vecteezy.com/system/resources/previews/020/765/399/large_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg' }}"
-                                                 class="rounded-circle me-3"
-                                                 style="width: 50px; height: 50px; object-fit: cover;"
-                                                 alt="Profile Picture">
-                                            <div class="flex-grow-1">
-                                                <h6 class="mb-1 fw-bold">{{ $comment->user->name }}</h6>
-                                                <p class="mb-2 p-2 rounded text-white" style="background-color: #0d6efd;">{{ $comment->content }}</p>
-                                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                                            </div>
-                                        </div>
-
-                                    @endforeach
-                                </div>
-
-                                <!-- Yorum Yazma Formu -->
-                                <form class="comment-form" data-product-id="{{ $product->id }}">
-                                    <div class="form-group">
-                                        <textarea class="form-control" rows="3" placeholder="Write your comment..."></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Post Comment</button>
-                                </form>
-                            </div>
-                        </div>
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle fa-2x mb-3"></i>
+                        <h4>No products found</h4>
+                        <p>There are currently no products available in the market.</p>
+                        @auth
+                            <a href="{{ route('products.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Your First Product
+                            </a>
+                        @endauth
                     </div>
                 </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">
-                            <i class="fas fa-info-circle fa-2x mb-3"></i>
-                            <h4>No products found</h4>
-                            <p>There are currently no products available in the market.</p>
-                            @auth
-                                <a href="{{ route('products.create') }}" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Add Your First Product
-                                </a>
-                            @endauth
-                        </div>
-                    </div>
             @endforelse
         </div>
 
